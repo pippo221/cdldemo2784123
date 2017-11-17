@@ -159,7 +159,7 @@ public class ViewListCustomerFragment extends Fragment {
 //                listener.onClickTopFragment(ListViewClickItemArray.get(position).toString());
 
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                ItemFourFragment fragment = new ItemFourFragment();
+                CustomerDetailFragment fragment = new CustomerDetailFragment();
                 Bundle bundle2 = new Bundle();
 
                 bundle2.putString("Name", NAME_Array.get(position).toString());
@@ -172,16 +172,17 @@ public class ViewListCustomerFragment extends Fragment {
                 bundle2.putString("DurationStart", CONTRACT_DURATION_START_Array.get(position).toString());
                 bundle2.putString("DurationEnd", CONTRACT_DURATION_END_Array.get(position).toString());
 
-                fragment.setArguments(bundle2);
-                transaction.replace(R.id.frame_layout, fragment);
+                fragment.setArguments(bundle2);//Set Argument cho fragment
+                transaction.replace(R.id.frame_layout, fragment); //day fragment len mainactivity
                 transaction.commit();
+
                 String strTemp = NAME_Array.get(position).toString();
                 String strTempID = ID_Array.get(position).toString();
                 String strTempPayment = PAYMENT_Array.get(position).toString();
                 String tempContractDays = CONTRACT_DAYS_Array.get(position).toString();
 //                Toast.makeText(getActivity(), tempContractDays, Toast.LENGTH_SHORT).show();
                 int intContractDays = Integer.parseInt(tempContractDays);
-                Toast.makeText(getActivity(), tempContractDays, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), tempContractDays, Toast.LENGTH_SHORT).show();
 
                 OpenSQLiteDataBase();
 //                Toast.makeText(getActivity(), strTemp, Toast.LENGTH_SHORT).show();
@@ -199,7 +200,7 @@ public class ViewListCustomerFragment extends Fragment {
                 Date startDate = new Date();
                 try {
                     startDate = formatter.parse(tempStartDate); //chuyen sang Date time
-                    Toast.makeText(getContext(),tempStartDate, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(),tempStartDate, Toast.LENGTH_SHORT).show();
                     temp = formatter.format(startDate); //chuyen sang String
                     DurationListStart.add(temp);
                 } catch (ParseException e) {
@@ -216,7 +217,7 @@ public class ViewListCustomerFragment extends Fragment {
                     DurationListEnd.add(temp);
 //                    Toast.makeText(getContext(),DurationListStart.get(i), Toast.LENGTH_SHORT).show();
 //                    Toast.makeText(getContext(),DurationListEnd.get(i), Toast.LENGTH_SHORT).show();
-                    c.add(Calendar.DATE, 1);
+//                    c.add(Calendar.DATE, 1);
                     startDate = c.getTime();
                     temp = formatter.format(startDate);
                     DurationListStart.add(temp);

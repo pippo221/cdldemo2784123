@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putString("ListViewClickedItemValue", message);
 //set Fragmentclass Arguments
-        ItemFourFragment fragobj = new ItemFourFragment();
+        CustomerDetailFragment fragobj = new CustomerDetailFragment();
         fragobj.setArguments(bundle);
 
         bottomNavigationView.setOnNavigationItemSelectedListener
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                                 selectedFragment = ViewListCustomerFragment.newInstance();
                                 break;
                             case R.id.action_item3:
-                                selectedFragment = ItemThreeFragment.newInstance();
+                                selectedFragment = DataStatusFragment.newInstance();
                                 break;
                             case R.id.action_item4:
 

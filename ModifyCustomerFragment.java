@@ -27,8 +27,8 @@ public class ModifyCustomerFragment extends Fragment {
 
     SQLiteDatabase sqLiteDatabaseObj;
     EditText editTextName, editTextPhoneNumber, editTextAddress, editTextServiceType, editTextMonthlyCharge, editTextBox, editTextCost, editTextStartDate, editTextMAC, editTextContractDays, editTextExpiredDate, editTextMessageHolder;
-    String strNameHolder, strNumberHolder, SQLiteDataBaseQueryHolder, SQLiteDataBaseQueryHolder2, strAddressHolder, strServiceTypeHolder, strServiceHolder, strMonthlyChargeHolder, strBoxHolder, strCostholder, strStartDateHolder, strMACHolder, strExpiredDateHolder, strContractDaysHolder, strMessageHolder, strEndDateHolder, strPaymentStatusHolder = "YES";
-    FloatingActionButton EnterData, ButtonDisplayData, buttonTest;
+    String strNameHolder, strNumberHolder, SQLiteDataBaseQueryHolder, strAddressHolder, strServiceTypeHolder, strServiceHolder, strMonthlyChargeHolder, strBoxHolder, strCostholder, strStartDateHolder, strMACHolder, strExpiredDateHolder, strContractDaysHolder, strMessageHolder, strEndDateHolder, strPaymentStatusHolder = "YES";
+    FloatingActionButton EnterData, ButtonDisplayData;
     int contractDaysTemp;
     RadioGroup radioGroupService;
     Boolean EditTextEmptyHold;
@@ -67,6 +67,7 @@ public class ModifyCustomerFragment extends Fragment {
         editTextExpiredDate = (EditText) view.findViewById(R.id.editText11_NewExpiredDate);
         editTextMessageHolder = (EditText) view.findViewById(R.id.editText13_NewtMessage);
         editTextMonthlyCharge = (EditText) view.findViewById(R.id.editTextNew6_MonthlyCharge);
+
         editTextStartDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,8 +121,6 @@ public class ModifyCustomerFragment extends Fragment {
             public void onClick(View view) {
 
                 SQLiteDataBaseBuild();
-
-//                SQLiteTableBuild();
 
                 CheckEditTextStatus();
 
@@ -187,16 +186,6 @@ public class ModifyCustomerFragment extends Fragment {
 
             }
         });
-//Button display all input record
-//        ButtonDisplayData.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(getApplicationContext(),
-//                        "Redirecting...", Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(NewCustomerActivity.this, DisplaySQLiteDataActivity.class);
-//                startActivity(intent);
-//            }
-//        });
         return view;
     }
 
@@ -207,39 +196,7 @@ public class ModifyCustomerFragment extends Fragment {
 
     }
 
-//    public void SQLiteTableBuild() {
-//
-//        sqLiteDatabaseObj.execSQL(
-////              "DROP TABLE IF EXISTS '"+SQLiteHelper.TABLE_NAME+"'; " +
-//                "CREATE TABLE IF NOT EXISTS " + SQLiteHelper.TABLE_NAME + "(" + SQLiteHelper.Table_Column_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " + SQLiteHelper.Table_Column_1_Name + " VARCHAR, " + SQLiteHelper.Table_Column_2_PhoneNumber + " VARCHAR" +
-//                        ", " + SQLiteHelper.Table_Column_3_Address + " VARCHAR" +
-//                        ", " + SQLiteHelper.Table_Column_4_ServiceType + " VARCHAR" +
-//                        ", " + SQLiteHelper.Table_Column_5_Service + " VARCHAR" +
-//                        ", " + SQLiteHelper.Table_Column_6_MonthlyCharge + " VARCHAR" +
-//                        ", " + SQLiteHelper.Table_Column_7_Box + " VARCHAR" +
-//                        ", " + SQLiteHelper.Table_Column_8_Cost + " VARCHAR" +
-//                        ", " + SQLiteHelper.Table_Column_9_StartDate + " VARCHAR" +
-//                        ", " + SQLiteHelper.Table_Column_10_MAC + " VARCHAR" +
-//                        ", " + SQLiteHelper.Table_Column_11_ExpiredDate + " VARCHAR" +
-//                        ", " + SQLiteHelper.Table_Column_12_ContractDays + " VARCHAR" +
-//                        ", " + SQLiteHelper.Table_Column_13_Message + " VARCHAR" +
-//                        ");");
-//        sqLiteDatabaseObj.execSQL(
-//                //   "DROP TABLE IF EXISTS '"+SQLiteHelper.TABLE2_NAME+"'; " +
-//                "CREATE TABLE IF NOT EXISTS " + SQLiteHelper.TABLE2_NAME + "(" + SQLiteHelper.Table2_Column_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL " +
-//                        ", " + SQLiteHelper.Table2_Column_Name + " VARCHAR" +
-//                        ", " + SQLiteHelper.Table2_Column_DurationStart + " VARCHAR" +
-//                        ", " + SQLiteHelper.Table2_Column_DurationEnd + " VARCHAR" +
-//                        ", " + SQLiteHelper.Table2_Column_Message + " VARCHAR" +
-//                        ");");
-//
-//    }
-
     public void InsertDataIntoSQLiteDatabase() throws ParseException {
-
-
-//        Toast.makeText(getApplicationContext(),
-//                strStartDateHolder, Toast.LENGTH_SHORT).show();
 
         if (EditTextEmptyHold == true) {
 
@@ -272,34 +229,8 @@ public class ModifyCustomerFragment extends Fragment {
                     ",'" + strEndDateHolder + "'" +
                     ",'" + strPaymentStatusHolder + "'" +
                     ");"
-//                    +"INSERT INTO " + SQLiteHelper.TABLE2_NAME+"(" +
-//                    "name"+
-//                    ")VALUES('" +
-//
-//                    "')" +
-//                    ""
             ;
             sqLiteDatabaseObj.execSQL(SQLiteDataBaseQueryHolder);
-//            int m = DurationListEnd.size();
-//            int i2 = 0;
-//            do {
-////                Toast.makeText(getActivity(), DurationListStart.get(i2), Toast.LENGTH_SHORT).show();
-////                Toast.makeText(getActivity(), DurationListEnd.get(i2), Toast.LENGTH_SHORT).show();
-//                SQLiteDataBaseQueryHolder2 = "INSERT INTO " + SQLiteHelper.TABLE2_NAME + "(" +
-//                        "name, duration_start, duration_end, message, charge" +
-//                        ")VALUES('" +
-//                        strNameHolder + "'" +
-//                        ",'" + DurationListStart.get(i2) + "'" +
-//                        ",'" + DurationListEnd.get(i2) + "'" +
-//                        ",'Unpaid" +
-//                        ",'" + strMonthlyChargeHolder + "'" +
-//                        "')"
-//
-//                ;
-//                i2++;
-//                sqLiteDatabaseObj.execSQL(SQLiteDataBaseQueryHolder2);
-//            } while (i2 < m);
-
 
             sqLiteDatabaseObj.close();
 
@@ -316,16 +247,16 @@ public class ModifyCustomerFragment extends Fragment {
 
         editTextName.getText().clear();
         editTextPhoneNumber.getText().clear();
-//        editTextServiceType.getText().clear();
+        editTextStartDate.getText().clear();
+        editTextContractDays.getText().clear();
+        editTextExpiredDate.getText().clear();
+        editTextMessageHolder.getText().clear();
+        //        editTextServiceType.getText().clear();
 //        editTextMonthlyCharge.getText().clear();
 //        editTextBox.getText().clear();
 //        editTextCost.getText().clear();
-        editTextStartDate.getText().clear();
-//        editTextMAC.getText().clear();
-        editTextContractDays.getText().clear();
-        editTextExpiredDate.getText().clear();
-//        editTextAddress.getText().clear();
-        editTextMessageHolder.getText().clear();
+        //        editTextAddress.getText().clear();
+        //        editTextMAC.getText().clear();
         DurationListStart.clear();
     }
 
@@ -355,8 +286,6 @@ public class ModifyCustomerFragment extends Fragment {
                 strServiceHolder = "Rent";
                 break;
         }
-        ;
-
         if (TextUtils.isEmpty(strNameHolder) || TextUtils.isEmpty(strNumberHolder)
                 || TextUtils.isEmpty(strContractDaysHolder)
 //                || TextUtils.isEmpty(strBoxHolder)

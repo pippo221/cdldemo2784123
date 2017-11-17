@@ -3,13 +3,15 @@ package com.example.cuongducnguyenkp.cdldemo2;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +30,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
-public class ItemFourFragment extends Fragment {
-    TextView txtView, txtViewAddress, txtViewTEL, txtViewServiceType, txtViewMAC, txtViewContractDuration, txtViewExpiredIn, txtViewMess;
+public class CustomerDetailFragment extends Fragment {
+    TextView txtView, txtViewAddress, txtViewTEL, txtViewServiceType, txtViewMAC, txtViewContractDuration, txtViewExpiredIn, txtViewMess, txtStatus;
     EditText editTextName, editTextAddress, editTextPhone, editTextCompanyName, editTextMAC, editTextServiceType;
     private boolean viewGroupIsVisible = true;
     private View mViewGroup;
@@ -54,15 +57,15 @@ public class ItemFourFragment extends Fragment {
     ArrayList<Integer> CONTRACT_DAYS_Array;
     ArrayList<String> START_DATE;
     ArrayList<String> ListViewClickItemArray = new ArrayList<String>();
-    String TempHolder;
+    String TempHolder, tempID;
 
     String id, name, start, end;
     GridView gridView;
     List<String> li;
     ArrayAdapter<String> dataAdapter;
 
-    public static ItemFourFragment newInstance() {
-        ItemFourFragment fragment = new ItemFourFragment();
+    public static CustomerDetailFragment newInstance() {
+        CustomerDetailFragment fragment = new CustomerDetailFragment();
         return fragment;
     }
 
@@ -77,7 +80,7 @@ public class ItemFourFragment extends Fragment {
                              Bundle savedInstanceState) {
         String tempName2, tempDuration;
         final String tempName;
-        final View rootview = inflater.inflate(R.layout.activity_item_four_fragment, container, false);
+        final View rootview = inflater.inflate(R.layout.activity_customer_detail_fragment, container, false);
         txtView = (TextView) rootview.findViewById(R.id.textViewEditName);
         txtViewAddress = (TextView) rootview.findViewById(R.id.textViewEditAddress);
         txtViewTEL = (TextView) rootview.findViewById(R.id.textViewTEL);
@@ -86,6 +89,7 @@ public class ItemFourFragment extends Fragment {
         txtViewContractDuration = (TextView) rootview.findViewById(R.id.textViewEditContractDate);
         txtViewExpiredIn = (TextView) rootview.findViewById(R.id.textViewExpiredDays);
         txtViewMess = (TextView) rootview.findViewById(R.id.textViewMessage);
+        txtStatus = (TextView) rootview.findViewById(R.id.textViewEditStatus);
         relativeLayout1 = (RelativeLayout) rootview.findViewById(R.id.relativeLayoutEdit1);
         relativeLayout2 = (RelativeLayout) rootview.findViewById(R.id.relativeLayoutEdit2);
 
@@ -101,6 +105,7 @@ public class ItemFourFragment extends Fragment {
         txtViewServiceType.setText(tempName2);
         tempName = String.valueOf(bundle.getString("Name")); //Truyen ten tu man hinh truoc vao bien temp
         txtView.setText(tempName); //Set gia tri bien temp vao textViewName
+        tempID = String.valueOf(bundle.getString("ID"));
 
         tempDuration = String.valueOf(bundle.getString("DurationStart")) + " ~ " + String.valueOf(bundle.getString("DurationEnd"));
         txtViewContractDuration.setText(tempDuration);
@@ -136,7 +141,7 @@ public class ItemFourFragment extends Fragment {
                                                @Override
                                                public void onClick(View v) {
                                                    LayoutInflater inflater = getActivity().getLayoutInflater();
-                                                   View dialogView = inflater.inflate(R.layout.alert_edit_information1, null);
+                                                   final View dialogView = inflater.inflate(R.layout.alert_edit_information1, null);
                                                   /* Alert Dialog Code Start*/
                                                    AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
 
@@ -159,49 +164,62 @@ public class ItemFourFragment extends Fragment {
                                                    editTextMAC.setText(txtViewMAC.getText(), TextView.BufferType.EDITABLE);
                                                    editTextServiceType.setText(txtViewServiceType.getText(), TextView.BufferType.EDITABLE);
 
-                                                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                   alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                                        public void onClick(DialogInterface dialog, int whichButton) {
                                                            //You will get as string input data in this variable.
                                                            // here we convert the input to a string and show in a toast.
-                            //                        String srt = input.getEditableText().toString();
-                            //                        String str = ListViewClickItemArray.get(position).toString();
-                                                    Toast.makeText(getContext(), "OK 1", Toast.LENGTH_LONG).show();
-                            //
-                            //                        OpenSQLiteDataBase();
-                            //                        sqLiteDatabase = sqLiteHelper.getWritableDatabase();
-                            //                        String strHolder = "UPDATE " + SQLiteHelper.TABLE2_NAME + " SET" +
-                            //                                " message" +
-                            //                                "='" +
-                            //                                srt + "'" +
-                            //                                "WHERE id='" + str + "';";
-                            //                        sqLiteDatabaseObj.execSQL(strHolder);
-                            //                        sqLiteDatabaseObj.close();
+                                                           //                        String srt = input.getEditableText().toString();
+                                                           //                        String str = ListViewClickItemArray.get(position).toString();
+                                                           Toast.makeText(getContext(), "OK 1", Toast.LENGTH_LONG).show();
+                                                           //
+                                                           //                        OpenSQLiteDataBase();
+                                                           //                        sqLiteDatabase = sqLiteHelper.getWritableDatabase();
+                                                           //                        String strHolder = "UPDATE " + SQLiteHelper.TABLE2_NAME + " SET" +
+                                                           //                                " message" +
+                                                           //                                "='" +
+                                                           //                                srt + "'" +
+                                                           //                                "WHERE id='" + str + "';";
+                                                           //                        sqLiteDatabaseObj.execSQL(strHolder);
+                                                           //                        sqLiteDatabaseObj.close();
 
                                                        } // End of onClick(DialogInterface dialog, int whichButton)
                                                    }); //End of alert.setPositiveButton
-
                                                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                                                        public void onClick(DialogInterface dialog, int whichButton) {
                                                            // Canceled.
                                                            dialog.cancel();
                                                        }
                                                    }); //End of alert.setNegativeButton
+                                                   final int editTextLength = editTextName.getText().toString().trim().length();
                                                    final AlertDialog alertDialog = alert.create();
-                                                   alertDialog.show();
-                                                   alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                                                       @Override
-                                                       public void onClick(View v) {
-                                                           Boolean wantToCloseDialog = (editTextName.getText().toString().trim().isEmpty());
-                                                           // if EditText is empty disable closing on possitive button
-                                                           if (!wantToCloseDialog){
-                                                               alertDialog.dismiss();}
-                                                           Toast.makeText(getContext(), "OK 2", Toast.LENGTH_LONG).show();
+                                                   editTextName.addTextChangedListener(new TextWatcher() {
+                                                       private void handleText() {
+                                                           final Button okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                                                           if (editTextName.getText().length() == 0) {
+                                                               okButton.setEnabled(false);
+                                                           } else {
+                                                               okButton.setEnabled(true);
+                                                           }
+                                                       }
 
+                                                       @Override
+                                                       public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
                                                        }
-                                                   });
 
-       /* Alert Dialog Code End*/
+                                                       @Override
+                                                       public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                                                       }
+
+                                                       @Override
+                                                       public void afterTextChanged(Editable s) {
+                                                           handleText();
+                                                       }
+                                                   });
+                                                   alertDialog.show();
+//                                                   alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                                               /* Alert Dialog Code End*/
 
 
                                                }
@@ -218,6 +236,7 @@ public class ItemFourFragment extends Fragment {
         arrayListMessage = new ArrayList<String>();
         arrayListCharge = new ArrayList<String>();
         sqLiteHelper = new SQLiteHelper(getContext());
+        txtViewMess = (TextView) rootview.findViewById(R.id.textViewMessage);
 
         /////Listview click on item action
         listViewMessage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -225,6 +244,7 @@ public class ItemFourFragment extends Fragment {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+
 //                 /* Alert Dialog Code Start*/
 //                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
 //                alert.setTitle("Alert Dialog With EditText"); //Set Alert dialog title here
@@ -239,7 +259,7 @@ public class ItemFourFragment extends Fragment {
 //                        //You will get as string input data in this variable.
 //                        // here we convert the input to a string and show in a toast.
 //                        String srt = input.getEditableText().toString();
-//                        String str = ListViewClickItemArray.get(position).toString();
+
 //                        Toast.makeText(getContext(), srt + " " + str, Toast.LENGTH_LONG).show();
 //
 //                        OpenSQLiteDataBase();
@@ -263,23 +283,31 @@ public class ItemFourFragment extends Fragment {
 //                AlertDialog alertDialog = alert.create();
 //                alertDialog.show();
 //       /* Alert Dialog Code End*/
-                txtViewMess = (TextView) view.findViewById(R.id.textViewMessage);
-
-
-                if (click) {
-                    txtViewMess.setTextColor(Color.BLACK);
-                    txtViewMess.setText("Paid");
-
-                    Toast.makeText(getActivity(), txtViewMess.getText(), Toast.LENGTH_SHORT).show();
-                } else {
-                    txtViewMess.setTextColor(Color.RED);
-                    txtViewMess.setText("Unpaid");
-                    Toast.makeText(getActivity(), txtViewMess.getText(), Toast.LENGTH_SHORT).show();
-
-                }
-                click = !click;
+//                txtViewMess = (TextView) view.findViewById(R.id.textViewMessage);
+//
+//                if (click) {
+//                    txtViewMess.setTextColor(Color.BLACK);
+//                    txtViewMess.setText("Paid");
+//                    Toast.makeText(getActivity(), String.valueOf(position) +" position turned to Black", Toast.LENGTH_SHORT).show();
+//                    click = !click;
+//                } else {
+//                    txtViewMess.setTextColor(Color.RED);
+//                    txtViewMess.setText("Unpaid");
+//                    Toast.makeText(getActivity(), String.valueOf(position)+" position turned to Red", Toast.LENGTH_SHORT).show();
+//                    click = !click;
+//                }
+                String str = ListViewClickItemArray.get(position).toString();
+                OpenSQLiteDataBase();
+                sqLiteDatabase = sqLiteHelper.getWritableDatabase();
+                String strHolder = "UPDATE " + SQLiteHelper.TABLE2_NAME + " SET" +
+                        " message " +
+                        "=' PAID '" +
+                        "WHERE id='" + str + "';";
+                sqLiteDatabaseObj.execSQL(strHolder);
+                sqLiteDatabaseObj.close();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.detach(CustomerDetailFragment.this).attach(CustomerDetailFragment.this).commit();
             }// End of onClick(View v)
-
 
         });
 
@@ -302,12 +330,12 @@ public class ItemFourFragment extends Fragment {
     }
 
     private void ShowSQLiteDBdata() throws ParseException {
-        String tempName,tempID;
+        String tempName;
 
         Bundle bundle = getArguments();
         tempName = String.valueOf(bundle.getString("Name")); //Truyen ten tu man hinh truoc vao bien temp
-        tempID = String.valueOf(bundle.getString("ID"));
-        Toast.makeText(getContext(),tempID, Toast.LENGTH_LONG).show();
+
+//        Toast.makeText(getContext(), tempID, Toast.LENGTH_LONG).show();
         sqLiteDatabase = sqLiteHelper.getWritableDatabase();
         cursor = sqLiteDatabase.rawQuery("SELECT t2.id, t2.name, t2.customer_id" +
                         ", t2.duration_start, "
@@ -319,7 +347,7 @@ public class ItemFourFragment extends Fragment {
 //                        "t2." + SQLiteHelper.Table2_Column_Name
                         + " WHERE " +
 //                        "t2.name = '" + tempName + "' AND " +
-                        "t2.customer_id = '"+ tempID + "'ORDER BY t2.id"
+                        "t2.customer_id = '" + tempID + "'ORDER BY t2.id"
                 , null)
         ;
 
@@ -347,7 +375,7 @@ public class ItemFourFragment extends Fragment {
                 arrayListMessage.add(cursor.getString(cursor.getColumnIndex(SQLiteHelper.Table2_Column_Message)));
 
                 arrayListCharge.add(cursor.getString(cursor.getColumnIndex(SQLiteHelper.Table2_Column_Charge)));
-                Toast.makeText(getActivity(), arrayListDurationStart.get(i), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), arrayListDurationStart.get(i), Toast.LENGTH_SHORT).show();
                 i++;
             } while (cursor.moveToNext());
         }
@@ -365,25 +393,58 @@ public class ItemFourFragment extends Fragment {
         Date tempDate = new Date();
         today.set(Calendar.HOUR_OF_DAY, 0);
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        ArrayList<Long> tempMinus = new ArrayList<>(), tempPlus = new ArrayList<>();
+        ArrayList<String> tempMinusDate = new ArrayList<>(), tempPlusDate = new ArrayList<>();
         for (int i2 = 0; i2 < arrayListDurationEnd.size(); i2++) {
             tempDate = formatter.parse(arrayListDurationEnd.get(i2));
             long diff1, diff2, diff3;
             diff1 = today.getTime().getTime();
             diff2 = tempDate.getTime();
-            diff3 = (diff2 - diff1) / (1000 * 60 * 60 * 24);
+            diff3 = ((diff2 - diff1) / (1000 * 60 * 60 * 24)) + 1;
 //            Toast.makeText(getActivity(), String.valueOf(diff3), Toast.LENGTH_SHORT).show();
+            if (diff3 < 0) {
+                tempMinus.add(diff3);
+                tempMinusDate.add(arrayListDurationEnd.get(i2));
+//                Toast.makeText(getActivity(), "Add to Minus value " + String.valueOf(diff3), Toast.LENGTH_SHORT).show();
+            } else {
+                tempPlus.add(diff3);
+//                Toast.makeText(getActivity(), "Add to Plus value " + String.valueOf(diff3), Toast.LENGTH_SHORT).show();
+                tempPlusDate.add(arrayListDurationEnd.get(i2));
+            }
 
         }
-        txtViewExpiredIn.setText("abc");
+        long tempExpiredInValue = 0;
+        String tempExpiredInDate = "";
+        int i4 = 0;
+        if (tempPlus.isEmpty() == false) {
+            do {
+                if (tempPlus.get(i4) < 30) {
+                    tempExpiredInValue = tempPlus.get(i4);
+                    tempExpiredInDate = tempPlusDate.get(i4);
+                }
+                i4++;
+            } while (i4 < tempPlus.size());
+        }
+        Calendar c = new GregorianCalendar();
+        String temp = "";
+        Date dateLastDate = new Date();
+        Date todayFormatted = new Date();
+
+        String temp5 = arrayListDurationEnd.get(arrayListDurationEnd.size() - 1);
+        Toast.makeText(getActivity(), temp5 + " " + String.valueOf(today), Toast.LENGTH_SHORT).show();
+        dateLastDate = formatter.parse(temp5);
+        today.set(Calendar.HOUR_OF_DAY, 0);
+        todayFormatted = today.getTime();
+        if (todayFormatted.before(dateLastDate) == true) {
+            txtStatus.setText("On Going");
+        } else {
+            txtStatus.setText("Finished");
+        }
+        txtViewExpiredIn.setText(String.valueOf(tempExpiredInValue) + " days on " + tempExpiredInDate);
         listViewMessage.setAdapter(listAdapter);
 
         cursor.close();
     }
-
-    private boolean isEmpty(EditText etText) {
-        return etText.getText().toString().trim().length() == 0;
-    }
-
 
 }
 
