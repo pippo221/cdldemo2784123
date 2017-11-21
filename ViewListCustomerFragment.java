@@ -194,13 +194,13 @@ public class ViewListCustomerFragment extends Fragment {
 
                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                 Calendar c = new GregorianCalendar();
-                String temp = "";
+                String temp = "",temp2 = CONTRACT_DURATION_START_Array.get(position).toString();
                 Calendar today = Calendar.getInstance();
                 today.set(Calendar.HOUR_OF_DAY, 0);
                 Date startDate = new Date();
                 try {
-                    startDate = formatter.parse(tempStartDate); //chuyen sang Date time
-//                    Toast.makeText(getContext(),tempStartDate, Toast.LENGTH_SHORT).show();
+                    startDate = formatter.parse(temp2); //chuyen sang Date time
+                    Toast.makeText(getContext(),temp2, Toast.LENGTH_SHORT).show();
                     temp = formatter.format(startDate); //chuyen sang String
                     DurationListStart.add(temp);
                 } catch (ParseException e) {
@@ -215,7 +215,7 @@ public class ViewListCustomerFragment extends Fragment {
                     startDate = c.getTime();
                     temp = formatter.format(startDate);
                     DurationListEnd.add(temp);
-//                    Toast.makeText(getContext(),DurationListStart.get(i), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),DurationListStart.get(i), Toast.LENGTH_SHORT).show();
 //                    Toast.makeText(getContext(),DurationListEnd.get(i), Toast.LENGTH_SHORT).show();
 //                    c.add(Calendar.DATE, 1);
                     startDate = c.getTime();
@@ -237,11 +237,11 @@ public class ViewListCustomerFragment extends Fragment {
                             ",'Unpaid'" +
                             ",'" + strTempPayment + "" +
                             "')" +
-                            ";"
-
+                            ";";
+//                    Toast.makeText(getActivity(), DurationListStart.get(i2), Toast.LENGTH_LONG).show();
 //                            " WHERE NOT EXISTS ( SELECT * FROM " +SQLiteHelper.TABLE2_NAME +" WHERE name = '"+
 //                            tempName+" AND duration_start = "+DurationListStart.get(i2)+"')"
-                    ;
+
                     i2++;
                     sqLiteDatabase.execSQL(SQLiteDataBaseQueryHolder3);
 //                    Toast.makeText(getActivity(), strTempPayment+" 123", Toast.LENGTH_LONG).show();
@@ -269,11 +269,11 @@ public class ViewListCustomerFragment extends Fragment {
                             ",'Unpaid'" +
                             ",'" + strTempPayment + "" +
                             "')" +
-                            ";"
-
+                            ";";
+                    Toast.makeText(getActivity(),strTempID, Toast.LENGTH_LONG).show();
 //                            " WHERE NOT EXISTS ( SELECT * FROM " +SQLiteHelper.TABLE2_NAME +" WHERE name = '"+
 //                            tempName+" AND duration_start = "+DurationListStart.get(i2)+"')"
-                    ;
+
                     sqLiteDatabase.execSQL(SQLiteDataBaseQueryHolder3);
                 }
                 String t = "delete from " + SQLiteHelper.TABLE2_NAME + " where rowid not in (select min(rowid) from " + SQLiteHelper.TABLE2_NAME + " group by customer_id, duration_start);";
@@ -392,7 +392,7 @@ public class ViewListCustomerFragment extends Fragment {
                 tempStartDate = cursor.getString(cursor.getColumnIndex(SQLiteHelper.Table_Column_9_StartDate));
                 tempEndDate = cursor.getString(cursor.getColumnIndex(SQLiteHelper.Table_Column_14_EndDate));
                 tempPayment = cursor.getString(cursor.getColumnIndex(SQLiteHelper.Table_Column_6_MonthlyCharge));
-
+//                Toast.makeText(getContext(),tempStartDate , Toast.LENGTH_LONG).show();
             } while (cursor.moveToNext());
         }
         String[] tempId, tempName, tempPhone;

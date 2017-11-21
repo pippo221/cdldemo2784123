@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.ParseException;
@@ -21,6 +22,8 @@ public class DataStatusFragment extends Fragment {
     SQLiteDatabase sqLiteDatabaseObj;
     ListAdapterCollect listAdapter;
     ListView listViewMessage;
+    TextView textViewCountAllCustomer;
+    int countAllCustomer;
     Cursor cursor;
 
     public static DataStatusFragment newInstance() {
@@ -41,8 +44,15 @@ public class DataStatusFragment extends Fragment {
         arrayListName = new ArrayList<String>();
         sqLiteHelper = new SQLiteHelper(getContext());
         listViewMessage = (ListView) rootview.findViewById(R.id.listViewMonthly);
-              return rootview;
+        textViewCountAllCustomer = (TextView) rootview.findViewById(R.id.textViewCountAllCustomer);
+
+        OpenSQLiteDataBase();
+
+
+
+        return rootview;
     }
+
     public void onResume() {
 
         try {
@@ -54,8 +64,8 @@ public class DataStatusFragment extends Fragment {
 
 
     }
+
     private void ShowSQLiteDBdata() throws ParseException {
-        OpenSQLiteDataBase();
 
         arrayListID.clear();
         arrayListName.clear();
@@ -73,7 +83,7 @@ public class DataStatusFragment extends Fragment {
                 arrayListID.add(cursor.getString(0));
                 //Inserting Column ID into Array to Use at ListView Click Listener Method.
                 arrayListName.add(cursor.getString(1));
-                Toast.makeText(getActivity(), arrayListID.get(i) + " = " + arrayListName.get(i), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), arrayListID.get(i) + " = " + arrayListName.get(i), Toast.LENGTH_SHORT).show();
                 i++;
             } while (cursor.moveToNext());
         }
@@ -83,8 +93,17 @@ public class DataStatusFragment extends Fragment {
                 arrayListName
         );
         listViewMessage.setAdapter(listAdapter);
+
+        cursor = sqLiteDatabase.rawQuery("SELECT COUNT(id) FROM " + SQLiteHelper.TABLE_NAME + "", null);
+        if (cursor.moveToFirst()) {
+            do {
+                countAllCustomer = cursor.getInt(0);
+            } while (cursor.moveToNext());
+        }
+        textViewCountAllCustomer.setText("Customer = "+String.valueOf(countAllCustomer));
         cursor.close();
     }
+
     private void OpenSQLiteDataBase() {
         sqLiteDatabaseObj = getActivity().openOrCreateDatabase(SQLiteHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
     }

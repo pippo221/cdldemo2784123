@@ -58,8 +58,6 @@ public class ListAdapter extends BaseAdapter {
         if (view == null) {
             holder = new Holder();
             layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-//            view = layoutInflater.inflate(R.layout.items, null);
             view = inflater.inflate(R.layout.items, null);
 
 
@@ -67,7 +65,6 @@ public class ListAdapter extends BaseAdapter {
             holder.Name_TextView = (TextView) view.findViewById(R.id.textViewEditAddress);
             holder.ServiceTypeTextView = (TextView) view.findViewById(R.id.textViewSERVICE_TYPE);
             holder.ContractDurationStartTextView = (TextView) view.findViewById(R.id.textViewDURATION);
-//            holder.ContractDurationEndTextView = (TextView) view.findViewById(R.id.textViewPHONE_NUMBER);
             holder.Status = (TextView) view.findViewById(R.id.textViewSTATUS);
             holder.Payment = (TextView) view.findViewById(R.id.textViewPAYMENT);
 
@@ -83,7 +80,6 @@ public class ListAdapter extends BaseAdapter {
         holder.Name_TextView.setText(list.get(position).getName());
         holder.ServiceTypeTextView.setText(list.get(position).getServiceType());
         holder.ContractDurationStartTextView.setText(list.get(position).getContractDurationStart()+" ~ "+list.get(position).getContractDurationEnd());
-//        holder.ContractDurationEndTextView.setText(list.get(position).getContractDurationEnd());
         holder.Status.setText(list.get(position).getStatus());
         holder.Payment.setText(list.get(position).getPayment());
 

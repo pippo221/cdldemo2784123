@@ -16,10 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,16 +29,30 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 public class CustomerDetailFragment extends Fragment {
-    TextView txtView, txtViewAddress, txtViewTEL, txtViewServiceType, txtViewMAC, txtViewContractDuration, txtViewExpiredIn, txtViewMess, txtStatus;
-    EditText editTextName, editTextAddress, editTextPhone, editTextCompanyName, editTextMAC, editTextServiceType;
+    TextView txtView;
+    TextView txtViewAddress;
+    TextView txtViewTEL;
+    TextView txtViewServiceType;
+    TextView txtViewMAC;
+    TextView txtViewContractDuration;
+    TextView txtViewExpiredIn;
+    TextView txtViewMess;
+    TextView txtStatus;
+    EditText editTextName;
+    EditText editTextAddress;
+    EditText editTextPhone;
+    EditText editTextCompanyName;
+    EditText editTextMAC;
+    EditText editTextServiceType;
+    View mViewGroup;
+    View mViewGroup2;
+    Button mButton;
     private boolean viewGroupIsVisible = true;
-    private View mViewGroup;
-    private View mViewGroup2;
-    private Button mButton;
-    RelativeLayout relativeLayout1, relativeLayout2;
+
+    RelativeLayout relativeLayout1;
+    RelativeLayout relativeLayout2;
     SQLiteOpenHelper sqLiteHelper;
     SQLiteDatabase sqLiteDatabase;
     Cursor cursor;
@@ -54,15 +66,14 @@ public class CustomerDetailFragment extends Fragment {
     ArrayList<String> arrayListDurationStart;
     ArrayList<String> arrayListDurationEnd;
     ArrayList<String> arrayListMessage;
-    ArrayList<Integer> CONTRACT_DAYS_Array;
-    ArrayList<String> START_DATE;
-    ArrayList<String> ListViewClickItemArray = new ArrayList<String>();
-    String TempHolder, tempID;
+    ArrayList<String> ListViewClickItemArray;
 
-    String id, name, start, end;
-    GridView gridView;
-    List<String> li;
-    ArrayAdapter<String> dataAdapter;
+    {
+        ListViewClickItemArray = new ArrayList<String>();
+    }
+
+    String tempID;
+    String id;
 
     public static CustomerDetailFragment newInstance() {
         CustomerDetailFragment fragment = new CustomerDetailFragment();
@@ -101,7 +112,6 @@ public class CustomerDetailFragment extends Fragment {
         tempName2 = String.valueOf(bundle.getString("MAC"));
         txtViewMAC.setText(tempName2);
         tempName2 = String.valueOf(bundle.getString("ServiceType"));
-//        Toast.makeText(getActivity(), tempName2 + " 123", Toast.LENGTH_SHORT).show();
         txtViewServiceType.setText(tempName2);
         tempName = String.valueOf(bundle.getString("Name")); //Truyen ten tu man hinh truoc vao bien temp
         txtView.setText(tempName); //Set gia tri bien temp vao textViewName
@@ -168,22 +178,31 @@ public class CustomerDetailFragment extends Fragment {
                                                        public void onClick(DialogInterface dialog, int whichButton) {
                                                            //You will get as string input data in this variable.
                                                            // here we convert the input to a string and show in a toast.
-                                                           //                        String srt = input.getEditableText().toString();
-                                                           //                        String str = ListViewClickItemArray.get(position).toString();
-                                                           Toast.makeText(getContext(), "OK 1", Toast.LENGTH_LONG).show();
-                                                           //
-                                                           //                        OpenSQLiteDataBase();
-                                                           //                        sqLiteDatabase = sqLiteHelper.getWritableDatabase();
-                                                           //                        String strHolder = "UPDATE " + SQLiteHelper.TABLE2_NAME + " SET" +
-                                                           //                                " message" +
-                                                           //                                "='" +
-                                                           //                                srt + "'" +
-                                                           //                                "WHERE id='" + str + "';";
-                                                           //                        sqLiteDatabaseObj.execSQL(strHolder);
-                                                           //                        sqLiteDatabaseObj.close();
+                                                           String str1 = editTextName.getEditableText().toString();
+                                                           String str2 = editTextAddress.getEditableText().toString();
+                                                           String str3 = editTextPhone.getEditableText().toString();
+                                                           String str4 = editTextMAC.getEditableText().toString();
+                                                           String str5 = editTextServiceType.getEditableText().toString();
 
+                                                           OpenSQLiteDataBase();
+                                                           sqLiteDatabase = sqLiteHelper.getWritableDatabase();
+                                                           String strHolder = "UPDATE " + SQLiteHelper.TABLE_NAME + "  SET" +
+                                                                   " name='" + str1 + "'," +
+                                                                   " address='" + str2 + "'," +
+                                                                   " phone_number='" + str3 + "'," +
+                                                                   " MAC_address='" + str4 + "'," +
+                                                                   " service_type='" + str5 + "'" +
+                                                                   " WHERE id='" + tempID + "'";
+                                                                   String strHolder2 = "UPDATE "+ SQLiteHelper.TABLE2_NAME + " SET" +
+                                                                   " name='" + str1 + "'" +" where customer_id = '" + tempID + "'";
+                                                                   ;
+                                                           sqLiteDatabaseObj.execSQL(strHolder);
+                                                           sqLiteDatabaseObj.execSQL(strHolder2);
+                                                           sqLiteDatabaseObj.close();
+                                                           Toast.makeText(getContext(), "Update customer information successfully", Toast.LENGTH_LONG).show();
                                                        } // End of onClick(DialogInterface dialog, int whichButton)
                                                    }); //End of alert.setPositiveButton
+
                                                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                                                        public void onClick(DialogInterface dialog, int whichButton) {
                                                            // Canceled.
@@ -303,6 +322,7 @@ public class CustomerDetailFragment extends Fragment {
                         " message " +
                         "=' PAID '" +
                         "WHERE id='" + str + "';";
+
                 sqLiteDatabaseObj.execSQL(strHolder);
                 sqLiteDatabaseObj.close();
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -431,7 +451,7 @@ public class CustomerDetailFragment extends Fragment {
         Date todayFormatted = new Date();
 
         String temp5 = arrayListDurationEnd.get(arrayListDurationEnd.size() - 1);
-        Toast.makeText(getActivity(), temp5 + " " + String.valueOf(today), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), temp5 + " " + String.valueOf(today), Toast.LENGTH_SHORT).show();
         dateLastDate = formatter.parse(temp5);
         today.set(Calendar.HOUR_OF_DAY, 0);
         todayFormatted = today.getTime();

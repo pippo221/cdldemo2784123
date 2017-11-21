@@ -57,6 +57,14 @@ public class ListAdapterDuration extends BaseAdapter {
         return 0;
     }
 
+
+
+    @Override
+    public boolean isEnabled(int position){
+
+        return false;
+    };
+
     public View getView(int position, View child, ViewGroup parent) {
 
         Holder holder;

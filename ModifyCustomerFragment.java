@@ -26,18 +26,43 @@ import java.util.List;
 public class ModifyCustomerFragment extends Fragment {
 
     SQLiteDatabase sqLiteDatabaseObj;
-    EditText editTextName, editTextPhoneNumber, editTextAddress, editTextServiceType, editTextMonthlyCharge, editTextBox, editTextCost, editTextStartDate, editTextMAC, editTextContractDays, editTextExpiredDate, editTextMessageHolder;
-    String strNameHolder, strNumberHolder, SQLiteDataBaseQueryHolder, strAddressHolder, strServiceTypeHolder, strServiceHolder, strMonthlyChargeHolder, strBoxHolder, strCostholder, strStartDateHolder, strMACHolder, strExpiredDateHolder, strContractDaysHolder, strMessageHolder, strEndDateHolder, strPaymentStatusHolder = "YES";
-    FloatingActionButton EnterData, ButtonDisplayData;
-    int contractDaysTemp;
+    EditText editTextName;
+    EditText editTextPhoneNumber;
+    EditText editTextAddress;
+    EditText editTextServiceType;
+    EditText editTextMonthlyCharge;
+    EditText editTextBox;
+    EditText editTextCost;
+    EditText editTextStartDate;
+    EditText editTextMAC;
+    EditText editTextContractDays;
+
+    String strNameHolder;
+    String strNumberHolder;
+    String SQLiteDataBaseQueryHolder;
+    String strAddressHolder;
+    String strServiceTypeHolder;
+    String strServiceHolder;
+    String strMonthlyChargeHolder;
+    String strBoxHolder;
+    String strCostholder;
+    String strStartDateHolder;
+    String strMACHolder;
+    String strExpiredDateHolder;
+    String strContractDaysHolder;
+    String strMessageHolder;
+    String strEndDateHolder;
+    String strPaymentStatusHolder = "YES";
+    FloatingActionButton EnterData;
+    FloatingActionButton ButtonDisplayData;
+    int contractDaysTemp = 0;
     RadioGroup radioGroupService;
     Boolean EditTextEmptyHold;
     List<String> DurationListStart = new ArrayList<>();
     List<String> DurationListEnd = new ArrayList<>();
 
     public static ModifyCustomerFragment newInstance() {
-        ModifyCustomerFragment fragment = new ModifyCustomerFragment();
-        return fragment;
+        return new ModifyCustomerFragment();
     }
 
     @Override
@@ -55,7 +80,6 @@ public class ModifyCustomerFragment extends Fragment {
         ButtonDisplayData = (FloatingActionButton) view.findViewById(R.id.button2);
 
         editTextName = (EditText) view.findViewById(R.id.editText1_EditName);
-        editTextName.setText("abc");
         editTextPhoneNumber = (EditText) view.findViewById(R.id.editText2_NewPhone);
         editTextAddress = (EditText) view.findViewById(R.id.editText3_NewAddress);
         editTextServiceType = (EditText) view.findViewById(R.id.editText4_NewServiceType);
@@ -64,8 +88,6 @@ public class ModifyCustomerFragment extends Fragment {
         editTextStartDate = (EditText) view.findViewById(R.id.editText9_NewStartDate);
         editTextMAC = (EditText) view.findViewById(R.id.editText10_NewMACAddress);
         editTextContractDays = (EditText) view.findViewById(R.id.editText12_NewContractDay);
-        editTextExpiredDate = (EditText) view.findViewById(R.id.editText11_NewExpiredDate);
-        editTextMessageHolder = (EditText) view.findViewById(R.id.editText13_NewtMessage);
         editTextMonthlyCharge = (EditText) view.findViewById(R.id.editTextNew6_MonthlyCharge);
 
         editTextStartDate.setOnClickListener(new View.OnClickListener() {
@@ -91,28 +113,28 @@ public class ModifyCustomerFragment extends Fragment {
             }
         });
 
-        editTextExpiredDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                //To show current date in the datepicker
-                Calendar mcurrentDate = Calendar.getInstance();
-                int mYear = mcurrentDate.get(Calendar.YEAR),
-                        mMonth = mcurrentDate.get(Calendar.MONTH),
-                        mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
-
-                DatePickerDialog mDatePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
-                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
-                        // TODO Auto-generated method stub
-                    /*      Your code to get date and time    */
-                        selectedmonth = selectedmonth + 1;
-                        editTextExpiredDate.setText("" + selectedday + "/" + selectedmonth + "/" + selectedyear);
-                    }
-                }, mYear, mMonth, mDay);
-                mDatePicker.setTitle("Select date");
-                mDatePicker.show();
-            }
-        });
+//        editTextExpiredDate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // TODO Auto-generated method stub
+//                //To show current date in the datepicker
+//                Calendar mcurrentDate = Calendar.getInstance();
+//                int mYear = mcurrentDate.get(Calendar.YEAR),
+//                        mMonth = mcurrentDate.get(Calendar.MONTH),
+//                        mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
+//
+//                DatePickerDialog mDatePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+//                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+//                        // TODO Auto-generated method stub
+//                    /*      Your code to get date and time    */
+//                        selectedmonth = selectedmonth + 1;
+//                        editTextExpiredDate.setText("" + selectedday + "/" + selectedmonth + "/" + selectedyear);
+//                    }
+//                }, mYear, mMonth, mDay);
+//                mDatePicker.setTitle("Select date");
+//                mDatePicker.show();
+//            }
+//        });
 
 
         EnterData.setOnClickListener(new View.OnClickListener() {
@@ -123,18 +145,17 @@ public class ModifyCustomerFragment extends Fragment {
                 SQLiteDataBaseBuild();
 
                 CheckEditTextStatus();
-
-                Toast.makeText(getActivity().getApplicationContext(),
-                        "Button Insert Click...", Toast.LENGTH_SHORT).show();
-                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat formatter;
+                formatter = new SimpleDateFormat("dd/MM/yyyy");
                 Calendar c = new GregorianCalendar();
                 Calendar c1 = new GregorianCalendar();
-                String temp = "", temp2 = "";
+                String temp;
+                String temp2 ;
                 Calendar today = Calendar.getInstance();
                 today.set(Calendar.HOUR_OF_DAY, 0);
                 Date startDate = new Date();
-                Date endDate = new Date();
-                ////
+                Date endDate;
+
                 try {
                     startDate = formatter.parse(strStartDateHolder);//chuyen thanh dinh dang Date
                 } catch (ParseException e) {
@@ -145,9 +166,6 @@ public class ModifyCustomerFragment extends Fragment {
                 endDate = c1.getTime();
                 temp2 = formatter.format(endDate);
                 strEndDateHolder = temp2;
-                Toast.makeText(getActivity(),
-                        String.valueOf(contractDaysTemp), Toast.LENGTH_SHORT).show();
-                ///
 
                 try {
                     endDate = formatter.parse(strEndDateHolder);
@@ -164,8 +182,8 @@ public class ModifyCustomerFragment extends Fragment {
                     startDate = c.getTime();
                     temp = formatter.format(startDate);
                     DurationListEnd.add(temp);
-                    Toast.makeText(getActivity(), DurationListStart.get(i), Toast.LENGTH_SHORT).show();
-                    Toast.makeText(getActivity(), DurationListEnd.get(i), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), DurationListStart.get(i), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), DurationListEnd.get(i), Toast.LENGTH_SHORT).show();
                     c.add(Calendar.DATE, 1);
                     startDate = c.getTime();
                     temp = formatter.format(startDate);
@@ -173,7 +191,6 @@ public class ModifyCustomerFragment extends Fragment {
 
                     i++;
                 }
-
 
                 try {
                     InsertDataIntoSQLiteDatabase();
@@ -199,7 +216,7 @@ public class ModifyCustomerFragment extends Fragment {
     public void InsertDataIntoSQLiteDatabase() throws ParseException {
 
         if (EditTextEmptyHold == true) {
-
+            contractDaysTemp = Integer.parseInt(strContractDaysHolder);
             SQLiteDataBaseQueryHolder = "INSERT INTO " + SQLiteHelper.TABLE_NAME + " (name,phone_number" +
                     ",address" +
                     ",service_type" +
@@ -249,16 +266,9 @@ public class ModifyCustomerFragment extends Fragment {
         editTextPhoneNumber.getText().clear();
         editTextStartDate.getText().clear();
         editTextContractDays.getText().clear();
-        editTextExpiredDate.getText().clear();
-        editTextMessageHolder.getText().clear();
-        //        editTextServiceType.getText().clear();
-//        editTextMonthlyCharge.getText().clear();
-//        editTextBox.getText().clear();
-//        editTextCost.getText().clear();
-        //        editTextAddress.getText().clear();
-        //        editTextMAC.getText().clear();
         DurationListStart.clear();
     }
+
 
     public void CheckEditTextStatus() {
 
@@ -266,16 +276,13 @@ public class ModifyCustomerFragment extends Fragment {
         strNumberHolder = editTextPhoneNumber.getText().toString();
         strAddressHolder = editTextAddress.getText().toString();
         strServiceTypeHolder = editTextServiceType.getText().toString();
-        //  strServiceHolder=editTextService.getText().toString();
         strMonthlyChargeHolder = editTextMonthlyCharge.getText().toString();
         strBoxHolder = editTextBox.getText().toString();
         strCostholder = editTextCost.getText().toString();
         strStartDateHolder = editTextStartDate.getText().toString();
         strMACHolder = editTextMAC.getText().toString();
-        strExpiredDateHolder = editTextExpiredDate.getText().toString();
         strContractDaysHolder = editTextContractDays.getText().toString();
-        strMessageHolder = editTextMessageHolder.getText().toString();
-        contractDaysTemp = Integer.parseInt(strContractDaysHolder);
+
         radioGroupService = (RadioGroup) getActivity().findViewById(R.id.radioGroupNewService5);
         int intChecked = radioGroupService.getCheckedRadioButtonId();
         switch (intChecked) {
@@ -288,13 +295,11 @@ public class ModifyCustomerFragment extends Fragment {
         }
         if (TextUtils.isEmpty(strNameHolder) || TextUtils.isEmpty(strNumberHolder)
                 || TextUtils.isEmpty(strContractDaysHolder)
-//                || TextUtils.isEmpty(strBoxHolder)
                 || TextUtils.isEmpty(strCostholder)
                 || TextUtils.isEmpty(strMACHolder)
                 || TextUtils.isEmpty(strMonthlyChargeHolder)
                 || TextUtils.isEmpty(strServiceTypeHolder)
                 || TextUtils.isEmpty(strAddressHolder)
-//                || TextUtils.isEmpty(strExpiredDateHolder)
                 || TextUtils.isEmpty(strStartDateHolder)
                 ) {
 
@@ -304,5 +309,6 @@ public class ModifyCustomerFragment extends Fragment {
 
             EditTextEmptyHold = true;
         }
+
     }
 }
